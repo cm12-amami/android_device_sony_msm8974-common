@@ -7,7 +7,18 @@ PRODUCT_PROPERTY_OVERRIDES += \
     persist.radio.add_power_save=1 \
     persist.radio.oem_socket=true \
     persist.radio.data_no_toggle=1 \
-    persist.radio.calls.on.ims=0
+    persist.radio.calls.on.ims=1 \
+    persist.ims.volte=true \
+    persist.dbg.volte_avail_ovr=1 \
+    persist.dbg.wfc_avail_ovr=1 \
+    persist.dbg.vt_avail_ovr=1 \
+    persist.radio.jbims=1 \
+    persist.ims.rcs=true \
+    persist.radio.RATE_ADAPT_ENABLE=1 \
+    persist.radio.ROTATION_ENABLE=1 \
+    persist.radio.VT_ENABLE=1 \
+    persist.radio.VT_HYBRID_ENABLE=1
+
 
 # Ril sends only one RIL_UNSOL_CALL_RING, so set call_ring.multiple to false
 PRODUCT_PROPERTY_OVERRIDES += \
