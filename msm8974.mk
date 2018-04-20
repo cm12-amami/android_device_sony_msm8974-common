@@ -14,6 +14,9 @@
 
 COMMON_PATH := device/sony/msm8974-common
 
+# Include msm8974-common system properties
+-include $(LOCAL_PATH)/systemprop.mk
+
 # Audio
 PRODUCT_PACKAGES += \
     audiod \
@@ -27,6 +30,7 @@ PRODUCT_PACKAGES += \
     libaudio-resampler \
     libqcompostprocbundle \
     libqcomvisualizer \
+    libqcomvoiceprocessingdescriptors \
     libqcomvoiceprocessing \
     tinymix
 
@@ -34,16 +38,10 @@ PRODUCT_PACKAGES += \
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/audio/audio_effects.conf:system/vendor/etc/audio_effects.conf
 
-# Camera
+# Specific apps
 PRODUCT_PACKAGES += \
-    camera.qcom \
-    CameraWorkaround
-
-PRODUCT_PACKAGES += \
-    libcutilz
-
-PRODUCT_PROPERTY_OVERRIDES += \
-    camera2.portability.force_api=1
+    Snap \
+    Jelly
 
 # Display
 PRODUCT_PACKAGES += \
@@ -62,31 +60,39 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     libion
 
-# IO Scheduler
-PRODUCT_PROPERTY_OVERRIDES += \
-    sys.io.scheduler=bfq
-
 # Lights
 PRODUCT_PACKAGES += \
     lights.msm8974
+
+# Init
+PRODUCT_COPY_FILES += \
+    $(COMMON_PATH)/rootdir/init.msm8974-common.rc:root/init.msm8974-common.rc \
+    $(COMMON_PATH)/rootdir/init.sony.usb.rc:root/init.sony.usb.rc \
+    $(COMMON_PATH)/rootdir/init.recovery.qcom.rc:root/init.recovery.qcom.rc
+
+
+PRODUCT_COPY_FILES += \
+    $(COMMON_PATH)/rootdir/system/bin/credmgrfirstboot.sh:system/bin/credmgrfirstboot.sh
+
+# Camera
+PRODUCT_PACKAGES += \
+	tad_static \
+	wait4tad_static \
+	libshims_signal \
+	libshims_idd \
+    libsonycamera
 
 # Media profile
 PRODUCT_COPY_FILES += \
     frameworks/av/media/libstagefright/data/media_codecs_google_audio.xml:system/etc/media_codecs_google_audio.xml \
     frameworks/av/media/libstagefright/data/media_codecs_google_telephony.xml:system/etc/media_codecs_google_telephony.xml \
     frameworks/av/media/libstagefright/data/media_codecs_google_video.xml:system/etc/media_codecs_google_video.xml \
-    $(COMMON_PATH)/media_codecs.xml:system/etc/media_codecs.xml
-
-# Media
-PRODUCT_PACKAGES += \
-    qcmediaplayer
-
-PRODUCT_BOOT_JARS += \
-    qcmediaplayer
+    $(COMMON_PATH)/media_profiles.xml:system/etc/media_profiles.xml
 
 # Permissions
 PRODUCT_COPY_FILES += \
-    frameworks/native/data/etc/android.hardware.ethernet.xml:system/etc/permissions/android.hardware.ethernet.xml
+    frameworks/native/data/etc/android.hardware.ethernet.xml:system/etc/permissions/android.hardware.ethernet.xml \
+    frameworks/native/data/etc/android.hardware.location.gps.xml:system/etc/permissions/android.hardware.location.gps.xml
 
 # Omx
 PRODUCT_PACKAGES += \
@@ -97,11 +103,27 @@ PRODUCT_PACKAGES += \
     libOmxQcelp13Enc \
     libOmxVdec \
     libOmxVenc \
+    libOmxVdecHevc \
     libc2dcolorconvert \
-    libdashplayer \
     libdivxdrmdecrypt \
     libmm-omxcore \
     libstagefrighthw
+
+# For android_filesystem_config.h
+PRODUCT_PACKAGES += \
+   fs_config_files
+
+# GPS
+PRODUCT_PACKAGES += \
+    gps.msm8974 \
+    libloc_core \
+    libloc_eng \
+    libgps.utils \
+    libloc_ds_api \
+    libloc_api_v02
+
+PRODUCT_COPY_FILES += \
+    $(COMMON_PATH)/gps/etc/gps.conf:system/etc/gps.conf
 
 # Overlay
 DEVICE_PACKAGE_OVERLAYS += $(COMMON_PATH)/overlay
@@ -114,48 +136,26 @@ endif
 
 # Power
 PRODUCT_PACKAGES += \
-    power.qcom
-
-# QC Perf
-PRODUCT_PROPERTY_OVERRIDES += \
-    ro.qualcomm.perf.cores_online=2 \
-    ro.vendor.extension_library=libqti-perfd-client.so
+    power.msm8974
 
 # Recovery
 PRODUCT_PACKAGES += \
     keycheck
 
-# RIL
-PRODUCT_PROPERTY_OVERRIDES += \
-    ro.telephony.ril_class=SonyRIL
+PRODUCT_PACKAGES += \
+    librmnetctl \
+    libxml2
 
 # Thermal management
 PRODUCT_PACKAGES += \
     thermanager
 
-# USB OTG
-PRODUCT_PROPERTY_OVERRIDES += \
-    persist.sys.isUsbOtgEnabled=true
-
 # Wifi
-PRODUCT_PROPERTY_OVERRIDES += \
-    wifi.interface=wlan0 \
-    wifi.supplicant_scan_interval=15
-
 PRODUCT_PACKAGES += \
     libwpa_client \
     hostapd \
-    dhcpcd.conf \
     wpa_supplicant \
     wpa_supplicant.conf
-
-# QCOM Display
-PRODUCT_PROPERTY_OVERRIDES += \
-    persist.hwc.mdpcomp.enable=true
-
-# OpenGL ES 3.0
-PRODUCT_PROPERTY_OVERRIDES += \
-    ro.opengles.version=196608
 
 # Include non-opensource parts
 $(call inherit-product, vendor/sony/msm8974-common/msm8974-common-vendor.mk)
