@@ -16,11 +16,16 @@ PRODUCT_PROPERTY_OVERRIDES += \
     debug.mdpcomp.logs=0 \
     debug.mdpcomp.4k2kSplit=1 \
     debug.mdpcomp.4k2kSplit=true \
-    dev.pm.dyn_samplingrate=1
+    dev.pm.dyn_samplingrate=1 \
+    debug.hwui.use_buffer_age=false
 
 # OpenGL ES 3.0
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.opengles.version=196608
+
+# OMX properties
+PRODUCT_PROPERTY_OVERRIDES += \
+    persist.media.treble_omx=false
 
 # HDMI
 PRODUCT_PROPERTY_OVERRIDES += \
@@ -58,6 +63,11 @@ PRODUCT_PROPERTY_OVERRIDES += \
     dalvik.vm.dex2oat-threads=2 \
     dalvik.vm.image-dex2oat-threads=4
 
+# GPS
+PRODUCT_PROPERTY_OVERRIDES += \
+    persist.gps.qc_nlp_in_use=0 \
+    ro.gps.agps_provider=1
+
 # Touchscreen
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.input.noresample=1
@@ -66,12 +76,18 @@ PRODUCT_PROPERTY_OVERRIDES += \
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.qc.sdk.camera.facialproc=false \
     ro.qc.sdk.gestures.camera=false \
-    camera.disable_zsl_mode=1
+    camera.disable_zsl_mode=1 \
+    persist.camera.HAL3.enabled=0 \
+    camera2.portability.force_api=1
 
 # CameraAV MM HAL1 hacks
 PRODUCT_PROPERTY_OVERRIDES += \
     media.stagefright.legacyencoder=true \
     media.stagefright.less-secure=true
+    
+# Wi-Fi interface name
+PRODUCT_PROPERTY_OVERRIDES += \
+    wifi.interface=wlan0
 
 # MPDecision
 PRODUCT_PROPERTY_OVERRIDES += \
